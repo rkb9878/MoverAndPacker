@@ -1,0 +1,155 @@
+{% load static %}
+    {% include "headerfiles.html" %}
+ <style>
+        .error {
+            color: red;
+
+        }
+     label
+     {
+          color: #fc636b;
+         {#font-family: cursive;#}
+     }
+    </style>
+
+<header id="home">
+    <div class="container">
+        <div class="header d-lg-flex justify-content-between align-items-center py-sm-3 py-2 px-sm-2 px-1">
+            <!-- logo -->
+            <div id="logo">
+                <h1><a href="/">Packing Kings</a></h1>
+            </div>
+            <!-- //logo -->
+            <!-- nav -->
+            <div class="nav_w3ls ml-lg-5">
+                <nav>
+                    <label for="drop" class="toggle">Menu</label>
+                    <input type="checkbox" id="drop"/>
+                    <ul class="menu">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="about">About</a></li>
+                        <li><a href="booking">ShiftMyHome</a></li>
+{#                        <li>#}
+{#                            <!-- First Tier Drop Down -->#}
+{#                            <label for="drop-2" class="toggle toogle-2">Serivces <span class="fa fa-angle-down"#}
+{#                                                                                       aria-hidden="true"></span>#}
+{#                            </label>#}
+{#                            <a href="#">Services <span class="fa fa-angle-down" aria-hidden="true"></span></a>#}
+{#                            <input type="checkbox" id="drop-2"/>#}
+{#                            <ul>#}
+{##}
+{#                                <li><a href="booking" class="drop-text">Booking</a></li>#}
+{#                                <li><a href="/" class="drop-text">Blog</a></li>#}
+{#                                <li><a href="/" class="drop-text">Services</a></li>#}
+{#                                <li><a href="about" class="drop-text">More</a></li>#}
+{#                            </ul>#}
+{#                        </li>#}
+                         <li><a href="contact">Contact</a></li>
+                        <li>
+                            <!-- First Tier Drop Down -->
+                            <label for="drop-2" class="toggle toogle-2"></label>
+                            <a href="#">MyBookings</a>
+                            <input type="checkbox" id="drop-2"/>
+                            <ul>
+                                <li><a href="userviewbookingdetails?paymentstatus=pending" class="drop-text">Pending </a></li>
+                                <li><a href="userviewbookingdetails?paymentstatus=success" class="drop-text">Successful</a></li>
+{#                                <li><a href="about" class="drop-text">More</a></li>#}
+                            </ul>
+                        </li>
+
+{#                        <li><a href="">Change password</a></li>#}
+
+                        <li class="ml-xl-5 ml-lg-2 mt-lg-0 mt-sm-4 mt-3">
+                            <label for="drop-2" class="toggle toogle-2"><span class="fa fa-user"
+                                                                                       aria-hidden="true"></span>
+                            </label>
+                            <a href="#" class="reqe-button">My Account <span class="fa fa-user fa-1x" aria-hidden="true"></span></a>
+                            <input type="checkbox" id="drop-2"/>
+                            <ul>
+                                <li><a onclick="userchangepassword('{{ request.session.useremail }}')" data-toggle="modal" href="#changepass">Change Password</a></li>
+{#                                <li><a href="about" class="drop-text">More</a></li>#}
+                                <a href="userlogout" >logout</a>
+
+                            </ul>
+                        </li>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <!-- //nav -->
+        </div>
+    </div>
+</header>
+<div class="modal fade" id="changepass" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="color: darkcyan;">Change Password</h4>
+                <button type="button" class="close" data-dismiss="modal">x</button>
+            </div>
+            <div class="modal-body">
+                <form action="" id="form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="oldpassword">Enter Old Password</label>
+                        <input type="password" data-rule-required="true" data-msg-required="Enter Old Password" placeholder="********" name="oldpassword" id="oldpassword"
+                               class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="newpassword">Enter New Password</label>
+                        <input type="password" data-rule-required="true" name="newpassword" id="newpassword" data-msg-required="Enter New Password" placeholder="********"
+                               class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmpassword">Enter Confirm Password</label>
+                        <input type="password" data-rule-required="true" id="confirmpassword" name="confirmpassword" data-msg-required="Enter Confirm Password" placeholder="********"
+                               data-rule-equalto="#newpassword" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="button" onclick="changepassword()" value="CHANGE" style="color: white;background-color: darkcyan"
+                               class="btn form-control col-sm-6 offset-sm-3">
+                    </div>
+
+                </form>
+                <h4 id="ans" style="color: orange"></h4>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn" style="color: white;background-color: darkcyan" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+        function userchangepassword() {
+            $("changepass").modal('show');
+        }
+
+        function changepassword() {
+            if ($('#form').valid()) {
+                var changepassworddata = new FormData();
+                changepassworddata.append('oldpassword', document.getElementById("oldpassword").value);
+                changepassworddata.append('newpassword', document.getElementById("newpassword").value);
+                changepassworddata.append('confirmpassword', document.getElementById("confirmpassword").value);
+
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 & this.status == 200) {
+                        var response = this.responseText;
+                        if (response == "success") {
+                            window.location.href = "login";
+                        } else if (response == "failed due to wrong old password") {
+                            document.getElementById("ans").innerHTML = "Old Password Incorrect !!";
+                        } else {
+                            window.location.href = "login";
+                        }
+                    }
+                };
+                xmlhttp.open("POST", "userchangepassword", true);
+                xmlhttp.send(changepassworddata);
+            }
+        }
+    </script>
+
+

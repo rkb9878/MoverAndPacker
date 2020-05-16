@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    {#    <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">#}
+    <link href="{% static "UI/jquery-ui.css" %}" rel="stylesheet">
+
+    <script src="{% static "js/jquery-3.4.1.js" %}"></script>
+    <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
+    <!-- Bootstrap-Core-CSS -->
+    <link rel="stylesheet" href="{% static "css/style.css" %}" type="text/css" media="all"/>
+    <!-- Style-CSS -->
+
+    <link href="{% static "css/font-awesome.min.css" %}" rel="stylesheet">
+    <!-- Font-Awesome-Icons-CSS -->
+    <!-- //Custom-Files -->
+    <!-- Web-Fonts -->
+    <link href="//fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+    <!-- //Web-Fonts -->
+    <style>
+
+        .error {
+        color: red;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, .4)), url("{% static "images/x21.jpg" %}") fixed no-repeat center center/cover;
+        }
+
+        h1,h5
+        {
+            color:white;
+            font-family: 'Times New Roman',Arial;
+            {#background-color: darkcyan;#}
+            {#width: fit-content;#}
+        }
+        label
+        {
+            color: white;
+            background-color: darkcyan;
+            width: fit-content;
+            {#font-family: 'Ultra',cursive;#}
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $('#userbookingvalid').validate();
+            $("#dateofpickup").datepicker({
+                changeYear: true,
+                changeMonth: true,
+                dateFormat: "yy-mm-dd",
+                minDate: 0
+            });
+            $("#dateofdropping").datepicker({
+                changeYear: true,
+                changeMonth: true,
+                dateFormat: "yy-mm-dd",
+                minDate: 0
+            });
+        });
+
+        function selectpickup() {
+            var pickupstate = document.getElementById("pickupstate").value;
+
+            var xmlhttp;
+            xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 & this.status == 200) {
+                    var listofcities = JSON.parse(this.response);
+                    s = "";
+                    s += "<option value=''>Select City</option>";
+                    {#alert(listofcities);#}
+                    for (var i = 0; i < listofcities.length; i++) {
+                        s += "<option>" + listofcities[i] + "</option>";
+                    }
+                    document.getElementById('pickupcity').innerHTML = s;
+                }
+            };
+            xmlhttp.open("GET", "showcity?state=" + pickupstate);
+            xmlhttp.send()
+        }
+
+        function dropping() {
+            var droppingstate = document.getElementById("droppingstate").value;
+
+            var xmlhttp;
+            xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 & this.status == 200) {
+                    var listofcities = JSON.parse(this.response);
+                    s = "";
+                    s += "<option value=''>Select City</option>";
+                    {#alert(listofcities);#}
+                    for (var i = 0; i < listofcities.length; i++) {
+                        s += "<option>" + listofcities[i] + "</option>";
+                    }
+                    document.getElementById('droppingcity').innerHTML = s;
+                }
+            };
+            xmlhttp.open("GET", "showcity?state=" + droppingstate);
+            xmlhttp.send()
+        }
+
+        function searchpackages() {
+            var pickupcity = document.getElementById("pickupcity").value;
+            var droppingcity = document.getElementById("droppingcity").value;
+
+            var xmlhttp;
+            xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 & this.status == 200) {
+
+                    if (this.responseText == "fail") {
+                        alert("No Services Available for Above Stations ");
+                        {#document.getElementById("message").innerHTML = "No Service Available for above Stations";#}
+                    } else {
+                        var listofpackages = JSON.parse(this.response);
+
+                        s = "";
+                        s += "<option value=''>Select Package</option>";
+                        {#alert(listofcities);#}
+                        for (var i = 0; i < listofpackages.length; i++) {
+                            s += "<option>" + listofpackages[i] + "</option>";
+                        }
+                        document.getElementById('packagename').innerHTML = s;
+                    }
+                }
+
+            };
+            xmlhttp.open("GET", "searchpackages?pickupcity=" + pickupcity + "&droppingcity=" + droppingcity);
+            xmlhttp.send()
+
+        }
+
+        {% comment %}function userbooking() {
+            if ($('#userbookingvalid').valid()) {
+
+                var userbookingdata = new FormData();
+                userbookingdata.append('pickupstate', document.getElementById("pickupstate").value);
+                userbookingdata.append('pickupcity', document.getElementById("pickupcity").value);
+                userbookingdata.append('pickupaddress', document.getElementById("pickupaddress").value);
+                userbookingdata.append('droppingstate', document.getElementById("droppingstate").value);
+                userbookingdata.append('droppingcity', document.getElementById("droppingcity").value);
+                userbookingdata.append('droppingaddress', document.getElementById("droppingaddress").value);
+                userbookingdata.append('packagename', document.getElementById("packagename").value);
+                userbookingdata.append('dateofpickup', document.getElementById("dateofpickup").value);
+                userbookingdata.append('dateofdropping', document.getElementById("dateofdropping").value);
+
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 & this.status == 200) {
+                        var response = this.responseText;
+                        if (response == 'success') {
+
+                        } else {
+
+                        }
+                    }
+                };
+                xmlhttp.open("POST", "userbooking1", true);
+                xmlhttp.send(userbookingdata);
+
+            }
+        }{% endcomment %}
+
+    </script>
+
+</head>
+
+<body>
+{% if request.session.useremail %}
+    {% include 'indexnabaruser.html' %}
+{% elif not request.session.useremail %}
+    {% include 'indexnavbarpublic.html' %}
+{% endif %}
+<div class="container">
+{#    <div class="col-sm-4 offset-sm-4">#}
+{#        <div class="jumbotron" >#}
+        <center><h1 class="page-header" style="margin-top: 40px ;color:white;background-color:darkcyan ;width:fit-content ;">BOOKING</h1></center><br><br>
+{#        </div>#}
+{#    </div>#}
+    <form action="" id="userbookingvalid" method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <h5>Pickup State</h5>
+                            <select class="form-control" name="pickupstate" id="pickupstate" required
+                                    data-msg-required="Select State" onchange="selectpickup()">
+                                <option value="">Pickup State</option>
+                                <option>Punjab</option>
+                                <option>Delhi</option>
+                                <option>Haryana</option>
+                                <option>Uttar Pradesh</option>
+                                <option>Jammu and Kashmir</option>
+                                <option>Maharashtra</option>
+                                <option>Madhya Pradesh</option>
+                                <option>Karnataka</option>
+                                <option>Kerala</option>
+                                <option>Tamil Nadu</option>
+                                <option>West Bengal</option>
+                                <option>Andhra Pradesh</option>
+                                <option>Rajasthan</option>
+                                <option>Gujarat</option>
+                                <option>Assam</option>
+                                <option>Uttarakhand</option>
+                            </select>
+                        </div><br>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <h5>Pickup City</h5>
+                            <select class="form-control" name="pickupcity" id="pickupcity" required
+                                    data-msg-required="Select City">
+                                <option value="">Pickup City</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h5>Pickup Address</h5>
+                    <textarea type="text" required class="form-control" name="pickupaddress"
+                              data-msg-required="Enter Pickup Address"
+                              id="pickupaddress"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <h5> Dropping State</h5>
+                            <select class="form-control" required name="droppingstate" data-msg-required="Select State"
+                                    id="droppingstate" onchange="dropping()">
+                                <option value="">Dropping State</option>
+                                <option>Punjab</option>
+                                <option>Delhi</option>
+                                <option>Haryana</option>
+                                <option>Uttar Pradesh</option>
+                                <option>Jammu and Kashmir</option>
+                                <option>Maharashtra</option>
+                                <option>Madhya Pradesh</option>
+                                <option>Karnataka</option>
+                                <option>Kerala</option>
+                                <option>Tamil Nadu</option>
+                                <option>West Bengal</option>
+                                <option>Andhra Pradesh</option>
+                                <option>Rajasthan</option>
+                                <option>Gujarat</option>
+                                <option>Assam</option>
+                                <option>Uttarakhand</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <h5>Dropping City</h5>
+                            <select class="form-control" name="droppingcity" id="droppingcity" required
+                                    data-msg-required="Select City" onchange="searchpackages()">
+                                <option value="">Dropping City</option>
+                            </select>
+                        </div>
+                    </div>
+                </div><br>
+                <div class="form-group">
+                    <h5>Dropping Address</h5>
+                    <textarea type="text" required class="form-control" name="droppingaddress"
+                              data-msg-required="Enter Dropping Address"
+                              id="droppingaddress"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <h5>Package Name</h5>
+                    <select id="packagename" name="packagename" required class="form-control"
+                            data-msg-required="Choose Package" onchange="getdescription()">
+                        <option value="">Choose Package</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <h5>Date of Pickup</h5>
+                    <input type="text" readonly required class="form-control" name="dateofpickup" id="dateofpickup"
+                           data-msg-required="Enter Date of Pickup">
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <h5>Date of Dropping</h5>
+                    <input type="text" readonly required class="form-control" name="dateofdropping"
+                           data-msg-required="Enter Dropping Date"
+                           id="dateofdropping">
+                </div>
+            </div>
+        </div><br>
+        <div class="row">
+            <div class="col-sm-6">
+                <input type="hidden" id="price">
+                <div id="showdescription" style="color: white; font-family: 'Ultra',cursive">
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <select id="paymentmode" name="paymentmode" class="form-control">
+                            <option value="">Choose Payment Mode</option>
+                            <option value="Cash">Cash</option>
+                            <option value="online">Online</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6">
+                        <button type="button" onclick="pay()" style="font-family: 'Ultra',cursive;color: white;background-color: darkcyan" class="btn form-control">Pay</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h3 id="message"></h3>
+        <script src="{% static "js/popper.js" %}"></script>
+        <script src="{% static "js/bootstrap.js" %}"></script>
+        <script src="{% static "dist/jquery.validate.js" %}"></script>
+        <script src="{% static "UI/jquery-ui.js" %}"></script>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <script>
+            function pay() {
+                var formdata = new FormData();
+                formdata.append('pickupstate', document.getElementById('pickupstate').value);
+                formdata.append('pickupcity', document.getElementById('pickupcity').value);
+                formdata.append('pickupaddress', document.getElementById('pickupaddress').value);
+                formdata.append('droppingstate', document.getElementById('droppingstate').value);
+                formdata.append('droppingcity', document.getElementById('droppingcity').value);
+                formdata.append('droppingaddress', document.getElementById('droppingaddress').value);
+                formdata.append('packagename', document.getElementById('packagename').value);
+                formdata.append('dateofpickup', document.getElementById('dateofpickup').value);
+                formdata.append('dateofdropping', document.getElementById('dateofdropping').value);
+                formdata.append('price', document.getElementById('price').value);
+                formdata.append('paymentmode', document.getElementById('paymentmode').value);
+                if (document.getElementById('paymentmode').value == 'Cash') {
+                    var xml = new XMLHttpRequest();
+                    xml.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            var ar = JSON.parse(this.response);
+                            console.log(ar);
+                            window.location.href = "thankspage?bookingid=" + ar['bookingid']+"&amount="+document.getElementById("price").value+"&status=pending" ;
+                        }
+                    };
+                    xml.open('POST', 'userbooking1', true);
+                    xml.send(formdata);
+                } else {
+                    var grandtotal = parseFloat(document.getElementById('price').value) * 100;
+                    var options = {
+                        "key": "rzp_test_dRWiKHS7zr2Gki",
+                        "amount": grandtotal,
+                        "name": "Packing Kings",
+                        "description": "Online Payment System",
+                        "image": "http://ecourses.aec.edu.in/aditya/images/po4.png",
+                        "handler": function (response) {
+                             {#alert(response.razorpay_payment_id);#}
+
+                            if (response.razorpay_payment_id == "") {
+                                alert('Failed');
+                                {#window.location.href = "bookingaction?status=failed";#}
+                            }
+                            else {
+                                alert('Success');
+                            {#    window.location.href = "bookingaction?status=success&&gt=" + grandtotal;#}
+
+                                    var xml = new XMLHttpRequest();
+                                    xml.onreadystatechange = function () {
+                                        if (this.readyState == 4 && this.status == 200) {
+                                            var ar = JSON.parse(this.response);
+                                            console.log(ar);
+                                            alert(ar['bookingid']);
+                                            window.location.href = "thankspage?bookingid=" + ar['bookingid']+"&amount="+document.getElementById("price").value+"&status=success";
+
+                                        }
+                                    };
+                                    xml.open('POST', 'userbooking1', true);
+                                    xml.send(formdata);
+                                }
+                        },
+                        "prefill": {
+                            "name": "",
+                            "email": ""
+                        },
+                        "notes": {
+                            "address": ""
+                        },
+                        "theme": {
+                            "color": "#F37254"
+                        }
+                    };
+                    var rzp1 = new Razorpay(options);
+                    rzp1.open();
+                }
+            }
+        </script>
+        <script>
+            var price;
+
+            function getdescription() {
+                var packagename = document.getElementById("packagename").value;
+                var xmlhttp;
+                xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 & this.status == 200) {
+                        {#alert(JSON.parse(this.response));#}
+                        {#alert($("#abc")['data-amount']);#}
+                        var list = JSON.parse(this.response);
+                        var description = list[0]["description"];
+                        price = list[0]["price"];
+                        $('#price').val(price);
+                        document.getElementById('showdescription').innerHTML = "Package Description :<br>"+description + "<br> Price is " + price;
+                    }
+                };
+                xmlhttp.open("GET", "getdescription?packagename=" + packagename);
+                xmlhttp.send()
+            }
+        </script>
+    </form>
+</div>
+
+
+</body>
+</html>
+
+
+

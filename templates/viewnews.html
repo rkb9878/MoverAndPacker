@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      {% load static %}
+    <link href="https://fonts.googleapis.com/css?family=Ultra&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static "fontawesome-free-5.11.2-web/css/all.css" %}">
+    <style>
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, .2)), url("{% static "images/x21.jpg" %}") fixed no-repeat center center/cover;
+        }
+        h3,label{
+            {#font-family: 'Ultra', serif;#}
+            color: #005ba4;
+        }
+       {#tr:hover td#}
+       {#{background: #34ce57;}#}
+
+               </style>
+    <script>
+        function confirmdelete(id) {
+            var result = confirm("Are You Sure to Delete the News ?");
+            if(result)
+            {
+                window.location.href = 'deletenews?q='+id;
+            }
+        }
+    </script>
+</head>
+<body>
+{% include "headerfiles.html" %}
+{% include "navigationadmin.html" %}
+    <div class="container">
+    <h3 class="text-center" style="margin-top: 50px;">NEWS</h3>
+    <div class="table-responsive">
+        <table class="table table-dark table-hover text-center">
+        <tr style="color: lightgreen;">
+            <th>NEWSID</th>
+            <th>TITLE</th>
+            <th>DESCRIPTION</th>
+            <th>DATE OF NEWS</th>
+            <th>DELETE</th>
+        </tr>
+            {% for row in ar %}
+            <tr>
+                <td>{{ row.newsid  }}</td>
+                <td>{{ row.title  }}</td>
+                <td>{{ row.description  }}</td>
+                <td>{{ row.dateofnews  }}</td>
+                <td><a onclick="confirmdelete('{{ row.newsid }}')"> <i class="fas fa-trash-alt fa-2x" style="color: red"></i> </a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    </div>
+</body>
+</html>

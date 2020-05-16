@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    {% include "headerfiles.html" %}
+    <link href="https://fonts.googleapis.com/css?family=Ultra&display=swap" rel="stylesheet">
+    <style>
+        .error
+        {
+             color: red;
+        }
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, .3)), url("{% static "images/x21.jpg" %}") fixed no-repeat center center/cover;
+        }
+        {#h3,label{#}
+        h3{
+            font-family: 'Ultra', serif; ;
+             color: #005ba4;
+        }
+        #servicingstationsvalid
+        {
+            background: rgba(255,255,255,0.38);
+            margin: 3.3em auto 3.5em;
+            padding: 2.5em 1em;"
+        }
+    </style>
+    <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
+    </head>
+    <script>
+        {#$(document).ready(function () {#}
+        {#       $('#servicingstationsvalid').validate();#}
+        {#   });#}
+         function addservicingstations()
+           {
+               if($('#servicingstationsvalid').valid())
+               {
+
+                   var servicestationdata = new FormData();
+                   servicestationdata.append('state',document.getElementById('state').value);
+                   servicestationdata.append('servicecityname',document.getElementById("servicecityname").value);
+                   servicestationdata.append('description',document.getElementById("description").value);
+
+                   var xmlhttp = new XMLHttpRequest();
+                   xmlhttp.onreadystatechange = function () {
+                       if(this.status == 200 & this.readyState == 4 )
+                       {
+                           var response = this.responseText;
+                           if(response =="success")
+                           {
+                               window.location.href = "viewservicingstations";
+                           }
+                           else
+                           {
+                               document.getElementById("ans").innerText ="Duplicate City Name";
+                           }
+                       }
+                   };
+                    xmlhttp.open("POST","servicingstations1",true);
+                    xmlhttp.send(servicestationdata)
+               }
+           }
+        </script>
+
+<body>
+{% include "navigationadmin.html" %}
+   <div class="container">
+    <div class="row">
+           <div class="col-sm-6 offset-sm-3">
+               <div class="parent-header"><h3 class="text-center" style="margin-top: 25px;">SERVICE STATION</h3></div>
+       <form action="" method="post" id="servicingstationsvalid">
+       {% csrf_token %}
+           <div class="form-group">
+               <label for="state" >State</label>
+{#               <select id="state" name="state" data-rule-required="true" onchange="selectcity()" class="form-control">#}
+               <select id="state" name="state" data-rule-required="true"  class="form-control" data-msg-required="Select State" >
+                   <option value="">Select State</option>
+                   {% for state in states %}
+                   <option value="{{ state}}">{{ state }}</option>
+                   {% endfor %}
+               </select>
+           </div>
+           <div class="form-group">
+               <label for="servicecityname">City</label>
+               <input type="text" id="servicecityname" name="servicecityname" data-rule-required="true" class="form-control" data-msg-required="Enter City" placeholder="Enter City" >
+
+           </div>
+           <div class="form-group">
+               <label for="description">Description</label>
+               <textarea name="description" id="description" data-rule-required="true" class="form-control" data-msg-required="Enter Description" placeholder="Enter Description"></textarea>
+           </div>
+           <div class="form-group">
+               <input type="button" onclick="addservicingstations()"  value="ADD" class="btn btn-success form-control col-sm-6 offset-sm-3">
+           </div>
+       </form>
+           <h5 id="ans" style="color:orange"></h5>
+           </div>
+    </div>
+    </div>
+</body>
+</html>

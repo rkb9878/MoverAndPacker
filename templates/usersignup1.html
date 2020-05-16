@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Packing Kings | Register </title>
+	<!-- Meta tag Keywords -->
+    {% load static %}
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8" />
+	<meta name="keywords" content="Freight Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+	<script>
+		addEventListener("load", function () {
+			setTimeout(hideURLbar, 0);
+		}, false);
+
+		function hideURLbar() {
+			window.scrollTo(0, 1);
+		}
+	</script>
+	<!-- //Meta tag Keywords -->
+
+	<!-- Custom-Files -->
+	<link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
+	<!-- Bootstrap-Core-CSS -->
+	<link rel="stylesheet" href="{% static "css/style.css" %}" type="text/css" media="all" />
+	<!-- Style-CSS -->
+	<link href="{% static "css/font-awesome.min.css" %}" rel="stylesheet">
+	<!-- Font-Awesome-Icons-CSS -->
+	<!-- //Custom-Files -->
+
+	<!-- Web-Fonts -->
+	<link href="//fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+	 rel="stylesheet">
+	<link href="//fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+	<!-- //Web-Fonts -->
+
+
+    {% load static %}
+    {% include "headerfiles.html" %}
+    <style>
+        .error{
+            color: red;
+        }
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, .2)), url("{% static "images/x21.jpg" %}") fixed no-repeat center center/cover;
+        }
+        #usersignupvalid
+        {
+             background: rgba(255,255,255,0.18);
+            margin: 3.3em auto 3.5em;
+            padding: 2.5em 1em;"
+        }
+        label
+        {
+            color: darkcyan;
+        }
+    </style>
+    <script>
+        function usersignup1() {
+            if ($('#usersignupvalid').valid()) {
+                var usersignupdata = new FormData();
+                usersignupdata.append('mobile',document.getElementById("mobile").value);
+                usersignupdata.append('email',document.getElementById("email").value);
+                usersignupdata.append('password',document.getElementById("password").value);
+                usersignupdata.append('name',document.getElementById("name").value);
+                usersignupdata.append('address',document.getElementById("address").value);
+                usersignupdata.append('photo',document.getElementById("photo").files[0]);
+
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 & this.status == 200) {
+                        var response = this.responseText;
+                        if (response == 'success') {
+                            window.location.href = "login"
+                        }
+                        else
+                        {
+                            document.getElementById("ans").innerHTML = "user already exist";
+                        }
+                    }
+                };
+                xmlhttp.open("POST", "usersignup2",true);
+                xmlhttp.send(usersignupdata);
+            }
+        }
+    </script>
+</head>
+<body>
+{% if request.session.useremail %}
+    {% include 'indexnabaruser.html' %}
+{% elif not request.session.useremail   %}
+    {% include 'indexnavbarpublic.html' %}
+{% endif %}
+
+	<!-- inner banner -->
+{#	<div class="inner-banner-w3ls d-flex flex-column justify-content-center align-items-center">#}
+{#	</div>#}
+	<!-- //inner banner -->
+	<!-- breadcrumbs -->
+{#	<nav aria-label="breadcrumb">#}
+{#		<ol class="breadcrumb d-flex justify-content-center">#}
+{#			<li class="breadcrumb-item">#}
+{#				<a href="/">Home</a>#}
+{#			</li>#}
+{#			<li class="breadcrumb-item active" aria-current="page">Register</li>#}
+{#		</ol>#}
+{#	</nav>#}
+	<!-- //breadcrumbs -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 offset-sm-3">
+            <form action="" id="usersignupvalid">
+                <div class="form-group">
+                    <label for="mobile">Mobile Number</label>
+                    <input type="text" readonly id="mobile" data-rule-number="true" maxlength="10" minlength="10" data-rule-required="true" name="mobile" class="form-control" value="{{ mobile }}">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" data-rule-required="true" name="email" class="form-control" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" data-rule-required="true" name="password" class="form-control" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" class="form-control" data-rule-required="true" placeholder="Name">
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" class="form-control" data-rule-required="true" placeholder="Address">
+                </div>
+                <div class="form-group">
+                    <label for="photo">Photo</label>
+                    <input type="file" id="photo" name="photo" class="form-control" placeholder="File" data-rule-required="true">
+                </div>
+                <div class="form-group text-center">
+                    <input type="button" class="btn" style="color: white;background-color: darkcyan" value="signup" onclick="usersignup1()">
+                    <h1 id="ans" style="color: orange"></h1>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% include "indexfooter.html" %}
+</body>
+</html>

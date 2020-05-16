@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+     {% include "headerfiles.html" %}
+    <style>
+        .error{
+            color: red;
+        }
+    </style>
+    <script>
+            function forget() {
+               $("mymodal").modal('show');
+            }
+            function userlogin()
+            {
+                if ($('#userloginvalid').valid()) {
+                    var userlogindata = new FormData();
+                    userlogindata.append('email',document.getElementById("email").value);
+                    userlogindata.append('password',document.getElementById("password").value)
+
+                    var xmlhttp = new XMLHttpRequest();
+                    xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 & this.status == 200) {
+                        var response = this.responseText;
+
+                        if (response == "success") {
+                            window.location.href = "userdashboard"
+                        }
+                        else
+                        {
+                            document.getElementById("ans").innerHTML = "Incorrect email and password";
+                        }
+                    }
+                };
+                xmlhttp.open("POST", "userlogin1",true);
+                xmlhttp.send(userlogindata);
+            }
+        }
+        function recoverpassword() {
+               if($('#recover').valid())
+            {
+                 var userforgetdata = new FormData();
+                    userforgetdata.append('mobile',document.getElementById("mobile").value);
+
+                    var xmlhttp = new XMLHttpRequest();
+                    xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 & this.status == 200) {
+                        var response = this.responseText;
+
+                        if (response == 'success') {
+                            window.location.href = "/";
+                        }
+                        else
+                        {
+                            document.getElementById("ans1").innerHTML = "Incorrect Mobile Number";
+                        }
+                    }
+                };
+                xmlhttp.open("POST", "forgetpassword",true);
+                xmlhttp.send(userforgetdata);
+            }
+        }
+
+    </script>
+</head>
+<body>
+
+   <div class="container">
+       <div class="row">
+           <div class="col-sm-6 offset-sm-3">
+                <div class="page-header">
+               <h1 class="text-center">USER LOGIN</h1><br>
+             </div>
+       <form action="" id="userloginvalid">
+
+       <div class="form-group">
+           <label for="email">Enter Email</label>
+           <input type="email" data-rule-required="true" name="email" id="email" placeholder="Enter Email" class="form-control">
+       </div>
+       <div class="form-group">
+           <label for="password">Password</label>
+            <input type="password" data-rule-required="true" name="password" id="password" placeholder="Enter Password" class="form-control">
+       </div>
+       <div class="form-group">
+           <input type="button" value="login" onclick="userlogin()" class="btn btn-success">
+           <a onclick="forget()" data-toggle="modal" href="#mymodal" class="text-right">Forget Password</a>
+       </div>
+{#           <h3 id="ans" style="color: orange">{{ message }}</h3>#}
+           <h3 id="ans" style="color: orange"></h3>
+           <h3 style="color: orange">{{ message1 }}</h3>
+       </form>
+           </div>
+           </div>
+       </div>
+      <div class="modal fade" id="mymodal" role="dialog">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h4 class="modal-title" style="">Recover Password</h4>
+                      <button type="button" class="close" data-dismiss="modal">x</button>
+                  </div>
+                  <div class="modal-body">
+                      <form action="" id="recover" method="post">
+                          {% csrf_token %}
+                          <div class="container-fluid">
+                              <div class="form-group">
+                                  <label>Enter Mobile</label>
+                                  <input type="text" name="mobile" data-rule-number="true" minlength="10" maxlength="10" data-rule-required="true" id="mobile" class="form-control">
+                              </div>
+                              <div class="form-group">
+                                  <input type="button" onclick="recoverpassword()" class="btn btn-success" value="Recover">
+
+                              </div>
+                          </div>
+                      </form>
+                      <h3 id="ans1" style="color: orange"></h3>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+</body>
+</html>

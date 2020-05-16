@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+        <link href="https://fonts.googleapis.com/css?family=Ultra&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static "fontawesome-free-5.11.2-web/css/all.css" %}">
+    <style>
+        .error
+        {
+             color: red;
+        }
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, .2)), url("{% static "images/x21.jpg" %}") fixed no-repeat center center/cover;
+        }
+        h3,label{
+            {#font-family: 'Ultra', serif;#}
+            color: #005ba4;
+        }
+       {# tr:hover td#}
+       {#{background: #34ce57;}#}
+    </style>
+    <script>
+        function confirmdelete(id) {
+            var result = confirm("Are You Sure to Delete the Package ?");
+            if(result)
+            {
+                window.location.href = 'deletepackages?q='+id;
+            }
+        }
+        function editpackages(id) {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if(this.status == 200 & this.readyState==4)
+                {
+                    var output = JSON.parse(this.response);
+                    var packagename = output["packagename"];
+                    var description= output["description"];
+                    var price = output["price"];
+                    document.getElementById("packagename").value = packagename;
+                    document.getElementById("description").value = description;
+                    document.getElementById("price").value = price;
+                    $("mymodal").modal('show');
+                }
+            };
+            xmlhttp.open('GET',"/editpackages?q="+id);
+            xmlhttp.send();
+        }
+        function updatepackages() {
+            if($('#updatepackages').valid())
+            {
+                var updatepackagedata = new FormData();
+                updatepackagedata.append('packagename',document.getElementById("packagename").value);
+                updatepackagedata.append('description',document.getElementById("description").value);
+                updatepackagedata.append('price',document.getElementById("price").value);
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function ()
+                {
+                    if(this.status==200 & this.readyState==4)
+                    {
+                        var response = this.responseText;
+                        if(response=='success')
+                        {
+                            window.location.href="viewpackages";
+                        }
+                    }
+                };
+                xmlhttp.open("POST","updatepackages",true);
+                xmlhttp.send(updatepackagedata);
+            }
+
+        }
+
+        function selectstate() {
+            var state = document.getElementById("choosestate").value;
+
+            var xmlhttp;
+            xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 & this.status == 200) {
+                    var listofcities = JSON.parse(this.response);
+                    s = "";
+                    s += "<option value=''>Select City</option>";
+                    {#alert(listofcities);#}
+                    for (var i = 0; i < listofcities.length; i++) {
+                        s += "<option>" + listofcities[i] + "</option>";
+                    }
+                    document.getElementById('choosecity').innerHTML = s;
+                }
+            };
+            xmlhttp.open("GET", "showcity?state=" + state);
+            xmlhttp.send();
+
+        }
+
+        function searchpackageslist()
+        {
+           var state = document.getElementById("choosestate").value;
+           var city = document.getElementById("choosecity").value;
+
+            var xmlhttp;
+            xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 & this.status == 200) {
+                    var output = JSON.parse(this.response);
+                    s = "";
+                    {#alert(output);#}
+                    for (var i = 0; i < output.length; i++) {
+                        s+="<tr>";
+                        s += "<td>" + output[i].packagename + "</td>";
+                        s += "<td>" + output[i].description + "</td>";
+                        s += "<td>" + output[i].state + "</td>";
+                        s += "<td>" + output[i].sourcecity + "</td>";
+                        s += "<td>" + output[i].state1 + "</td>";
+                        s += "<td>" + output[i].destinationcity + "</td>";
+                        s += "<td>" + output[i].price + "</td>";
+                        s+="<td><a onclick=\"editpackages('"+output[i].packagename+"')\" data-toggle=\"modal\" href=\"#mymodal\" ><i class=\"fas fa-edit fa-2x\" style=\"color: lightgreen\"></i> </a></td>\n" +
+                            "               <td><a class=\"bg-transparent\" onclick=\"confirmdelete('"+ output[i].packagename+"')\"><i class=\"fas fa-trash fa-2x\" style=\"color: red\"></i></a></td>";
+                        s+="</tr>";
+
+                    }
+                    document.getElementById('tablebody').innerHTML = s;
+                }
+            };
+            xmlhttp.open("GET", "getlistofpackages?state=" + state+"&city="+city);
+            xmlhttp.send()
+
+        }
+    </script>
+</head>
+
+  {% include "navigationadmin.html" %}
+  {% include "headerfiles.html" %}
+   <div class="container">
+   <h3 class="text-center " style="margin-top: 20px;">PACKAGES</h3>
+   <div class="row">
+                      <div class="form-group col-sm-3">
+                            <h5>Choose State</h5>
+                            <select class="form-control" name="choosestate" id="choosestate" required
+                                    data-msg-required="Choose State" onchange="selectstate()">
+                                <option value="">Select State</option>
+                                <option>Punjab</option>
+                                <option>Delhi</option>
+                                <option>Haryana</option>
+                                <option>Uttar Pradesh</option>
+                                <option>Jammu and Kashmir</option>
+                                <option>Maharashtra</option>
+                                <option>Madhya Pradesh</option>
+                                <option>Karnataka</option>
+                                <option>Kerala</option>
+                                <option>Tamil Nadu</option>
+                                <option>West Bengal</option>
+                                <option>Andhra Pradesh</option>
+                                <option>Rajasthan</option>
+                                <option>Gujarat</option>
+                                <option>Assam</option>
+                                <option>Uttarakhand</option>
+                            </select>
+                        </div>
+        <div class="form-group col-sm-3">
+                            <h5>Choose City</h5>
+                            <select class="form-control" name="choosecity" id="choosecity" required
+                                    data-msg-required="Choose City">
+                                <option value="">Choose City</option>
+                            </select>
+                        </div>
+       <div class="form-group col-sm-3">
+
+           <input type="button" value="Search" class="mt-4 form-control btn btn-success" onclick="searchpackageslist()">
+       </div>
+   </div>
+   <div class="table-responsive">
+       <table class="table table-hover table-dark text-center">
+       <thead style="color: lightgreen">
+           <th>Package&nbsp;Name</th>
+           <th>Description</th>
+           <th>Source&nbsp;State</th>
+           <th>Source&nbsp;City</th>
+           <th>Destination&nbsp;State</th>
+           <th>Destination&nbsp;City</th>
+           <th>Price</th>
+           <th>Edit</th>
+           <th>Delete</th>
+       </thead>
+       <tbody id="tablebody">
+           {% for row in ar %}
+               <tr>
+               <td>{{ row.packagename }}</td>
+               <td>{{ row.description }}</td>
+               <td>{{ row.state }}</td>
+               <td>{{ row.sourcecity }}</td>
+               <td>{{ row.state1 }}</td>
+               <td>{{ row.destinationcity }}</td>
+               <td>{{ row.price }}</td>
+               <td><a onclick="editpackages('{{ row.packagename }}')" data-toggle="modal" href="#mymodal" ><i class="fas fa-edit fa-2x" style="color: lightgreen"></i> </a></td>
+{#               <td><a href="editpackages?q={{ row.packagename }}"> </td>#}
+               <td><a class="bg-transparent" onclick="confirmdelete('{{ row.packagename }}')"><i class="fas fa-trash fa-2x" style="color: red"></i></a></td>
+               </tr>
+           {% endfor %}
+       </tbody>
+       </table>
+   </div>
+   </div>
+<div class="modal fade" id="mymodal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="font-family:'Ultra',cursive">Edit Package</h4>
+                <button type="button" class="close" data-dismiss="modal">x</button>
+            </div>
+            <div class="modal-body">
+                <form action="" id="updatepackages">
+                    {% csrf_token %}
+                  <div class="form-group">
+                      <label for="packagename">Package Name</label>
+                      <input type="text" id="packagename" readonly data-rule-required="true" name="packagename" class="form-control">
+                  </div>
+                 <div class="form-group">
+                     <label for="description">Description</label>
+                       <textarea name="description" id="description" data-rule-required="true" class="form-control"> </textarea>
+                 </div>
+                <div class="form-group">
+                    <label for="price">Price</label>
+                      <input type="text" id="price" data-rule-required="true" data-rule-number="true" name="price" class="form-control" >
+                </div>
+                <div class="form-group">
+                   <input type="button"  value="Edit"  onclick="updatepackages()" class="btn btn-success form-control col-sm-6 offset-sm-3">
+                </div>
+               </form>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+</body>
+</html>

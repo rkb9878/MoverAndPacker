@@ -1,0 +1,183 @@
+{% load static %}
+<link rel="stylesheet" href="{% static "fontawesome-free-5.11.2-web/css/all.css" %}">
+{#<link href="https://fonts.googleapis.com/css?family=Ultra&display=swap" rel="stylesheet">#}
+{#<style>#}
+{#   label#}
+{#   {#}
+{#       font-family: 'Ultra',cursive;#}
+{#   }#}
+{#</style>#}
+<link href="{% static "css/navbarcss.css" %}" rel="stylesheet">
+{#<nav class="navbar navbar-expand-lg navbar-light " style="background: #4ddba6;">#}
+<nav class="navbar navbar-expand-lg navbar-light " style="background: #4ddba6;">
+    <a class="navbar-brand" href="admindashboard"><label style="color: white">Packing Kings&nbsp;<i class="fas fa-truck fa-1x"></i></label></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="home"><label  style="color: white">HOME</label> <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" style="color: lightgreen" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <label  style="color: white">ADMIN</label>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+{#          <a class="dropdown-item" href="addadmin">Add Admin</a>#}
+            <a class="dropdown-item" href="viewadmin" ><label>VIEW ADMINS</label></a>
+
+        </div>
+      </li>
+        <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" style="color: lightgreen" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <label  style="color: white">SERVICE STATIONS</label>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="servicingstations"><label>Add Service Stations</label></a>
+            <a class="dropdown-item" href="viewservicingstations"><label>View Service Stations</label></a>
+        </div>
+      </li>
+        <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" style="color: lightgreen" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <label  style="color: white">PACKAGES</label>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="addpackages"><label>Add Packages</label></a>
+            <a class="dropdown-item" href="viewpackages"><label>View Packages</label></a>
+        </div>
+      </li>
+        <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" style="color: lightgreen" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+       <label  style="color: white">NEWS</label>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="addnews"><label>Add News</label></a>
+            <a class="dropdown-item" href="viewnews"><label>View News</label></a>
+        </div>
+      </li>
+       <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" style="color: lightgreen" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <label  style="color: white">BOOKINGS</label>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="viewbookings?paymentstatus=pending"><label>Pending</label></a>
+            <a class="dropdown-item" href="viewbookings?paymentstatus=success"><label>Success</label></a>
+        </div>
+      </li>
+         <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" style="color: lightgreen" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <label  style="color: white">SCHEDULE</label>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+{#          <a class="dropdown-item" href="addadmin">Add Admin</a>#}
+            <a class="dropdown-item" href="viewschedulevisit" ><label>View Schedule visit</label></a>
+
+        </div>
+      </li>
+{#        <li class="nav-item">#}
+{#            <a class="nav-link" onclick="changepasswordshow('{{ request.session.adminemail }}')" data-toggle="modal" href="#changepass" ><label>Change Password</label></a>#}
+{#      </li>#}
+    </ul>
+      <ul class="nav navbar-nav ml-auto" >
+          <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" style="color: lightgreen" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <label  style="color: white">MyAccount</label>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="nav-link" onclick="changepasswordshow('{{ request.session.adminemail }}')" data-toggle="modal" href="#changepass" ><label class="text-center">Change Password</label></a>
+            <a class="dropdown-item" href="logout"><span class="sr-only">(current)</span><label>Logout</label></a>
+        </div>
+      </li>
+{#        <li class="nav-item" >#}
+{#        <a class="nav-link" href="logout"> <span class="sr-only">(current)</span><label>Logout</label></a>#}
+{#      </li>#}
+      </ul>
+  </div>
+</nav>
+
+
+
+
+
+
+<! CHANGEPASSWORD MODAL POPUP >
+<div class="modal fade" id="changepass" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="">Change Password</h4>
+                <button type="button" class="close" data-dismiss="modal">x</button>
+            </div>
+            <div class="modal-body">
+                <form action="" id="form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="oldpassword">Enter Old Password</label>
+                        <input type="password" data-rule-required="true" name="oldpassword" id="oldpassword" placeholder="********"
+                               class="form-control" data-msg-required="Enter Old Password" >
+                    </div>
+                    <div class="form-group">
+                        <label for="newpassword">Enter New Password</label>
+                        <input type="password" data-rule-required="true" name="newpassword" id="newpassword" placeholder="********"
+                               class="form-control" data-msg-required="Enter New Password" >
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmpassword">Enter Confirm Password</label>
+                        <input type="password" data-rule-required="true" id="confirmpassword" name="confirmpassword" placeholder="********"
+                               data-rule-equalto="#newpassword" class="form-control" data-msg-required="Enter Confirm Password" >
+                    </div>
+                    <div class="form-group">
+                        <input type="button" onclick="adminchangepassword()" value="CHANGE"
+                               class="btn btn-success form-control col-sm-6 offset-sm-3">
+                    </div>
+
+                </form>
+                <h1 id="ans" style="color: orange"></h1>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+        .error {
+            color: red;
+        }
+    </style>
+    <script>
+        function changepasswordshow() {
+            $("changepass").modal('show');
+        }
+
+        function adminchangepassword() {
+            if ($('#form').valid()) {
+                var changepassworddata = new FormData();
+                changepassworddata.append('oldpassword', document.getElementById("oldpassword").value);
+                changepassworddata.append('newpassword', document.getElementById("newpassword").value);
+                changepassworddata.append('confirmpassword', document.getElementById("confirmpassword").value);
+
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 & this.status == 200) {
+                        var response = this.responseText;
+
+                        if (response == "success") {
+                            window.location.href = "adminlogin";
+                        } else if (response == "failed due to wrong old password")
+                        {
+                            document.getElementById("ans").innerHTML = "Old Password Incorrect !!";
+                        }
+                        else {
+                            window.location.href ="adminlogin";
+                        }
+                    }
+                };
+                xmlhttp.open("POST", "adminchangepassword", true);
+                xmlhttp.send(changepassworddata);
+            }
+        }
+    </script>

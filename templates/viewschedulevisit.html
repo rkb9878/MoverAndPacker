@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    {% include "headerfiles.html" %}
+    <link href="https://fonts.googleapis.com/css?family=Ultra&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="{% static "fontawesome-free-5.11.2-web/css/all.css" %}">
+<style>
+      h3,label{
+            {#font-family: 'Ultra', serif; ;#}
+            color: #005ba4;
+      }
+
+</style>
+
+</head>
+<body>
+{% include "navigationadmin.html" %}
+    <div class="container">
+    <h3 class="text-center" style="margin-top: 50px;">SCHEDULE VISIT</h3><br>
+    <div class="table-responsive">
+        <table class="table">
+        <tr>
+            <th>BOOKING ID</th>
+            <th>BOOKERNAME</th>
+            <th>PICKUP CITY</th>
+            <th>DROPPING CITY</th>
+            <th>PICKUP DATE</th>
+            <th>DROPPING DATE</th>
+        </tr>
+            {% for row in ar %}
+            <tr>
+                <td>{{ row.bookingid  }}</td>
+                <td>{{ row.bookername  }}</td>
+                <td>{{ row.pickupcity  }}</td>
+                <td>{{ row.droppingcity  }}</td>
+                <td>{{ row.dateofpickup }}</td>
+                <td>{{ row.dateofdropping }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    </div>
+
+
+
+</body>
+</html>

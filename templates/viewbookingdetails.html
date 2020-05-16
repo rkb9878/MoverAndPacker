@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+    {% include "headerfiles.html" %}
+    <style>
+         h3,label{
+            {#font-family: 'Ultra', serif; ;#}
+            color: #005ba4;
+
+         }
+     {#    body {#}
+     {#       background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, .2)), url("{% static "images/x21.jpg" %}") fixed no-repeat center center/cover;#}
+     {#   }#}
+     {#p{#}
+     {#    background: rgba(255,255,255,0.38);#}
+     {#}#}
+    </style>
+    <script>
+        function showtrack() {
+            $('#mytrackingmodal').modal('show');
+        }
+        function updatetracking() {
+            if ($('#addremarks').valid()) {
+                var updatetrackingdata = new FormData();
+                updatetrackingdata.append('bookingid', document.getElementById("bookingid").value);
+                updatetrackingdata.append('remarks', document.getElementById("remarks").value);
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (this.status == 200 & this.readyState == 4) {
+                        var response = this.responseText;
+                        if (response == 'success') {
+                            window.location.href = "admindashboard";
+                        }
+                    }
+                };
+                xmlhttp.open("POST", "updatetracking", true);
+                xmlhttp.send(updatetrackingdata);
+            }
+        }
+   </script>
+</head>
+
+<body>
+{% include "navigationadmin.html" %}
+<div class="parent-header"><h3 class="text-center" style="margin-top: 25px; font-family: 'Ultra',cursive">BOOKING DETAILS</h3></div><br>
+<div class="col-sm-10 offset-1">
+<div class="row">
+     <div class="col-sm-3">
+         <label>Pickup State</label>
+        <p>{{ d.pickupstate }} </p>
+     </div>
+     <div class="col-sm-3">
+         <label>Pickup City</label>
+        <p>{{ d.pickupcity }}</p>
+     </div>
+     <div class="col-sm-3">
+         <label>Pickup Address</label>
+        <p>{{ d.pickupaddress }} </p>
+     </div>
+     <div class="col-sm-3">
+          <label>Booking Date</label>
+        <p>{{ d.dateofbooking }} </p>
+     </div>
+ </div>
+<div class="row">
+     <div class="col-sm-3">
+         <label>Dropping State</label>
+        <p>{{ d.droppingstate }} </p>
+     </div>
+     <div class="col-sm-3">
+          <label>Dropping City</label>
+        <p>{{ d.droppingcity }} </p>
+     </div>
+     <div class="col-sm-3">
+        <label>Dropping Address</label>
+        <p>{{ d.droppingaddress }} </p>
+     </div>
+     <div class="col-sm-3">
+         <label>Package Name</label>
+        <p>{{ d.packagename }} </p>
+     </div>
+ </div>
+<div class="row">
+     <div class="col-sm-3">
+          <label>Date of Pickup</label>
+        <p>{{ d.dateofpickup }} </p>
+     </div>
+     <div class="col-sm-3">
+          <label>Date of Dropping</label>
+        <p>{{ d.dateofdropping }} </p>
+     </div>
+     <div class="col-sm-3">
+        <label>Payment Mode</label>
+        <p>{{ d.paymentmode }} </p>
+     </div>
+     <div class="col-sm-3">
+         <label>Amount Received</label>
+        <p>{{ d.amountreceived }} </p>
+     </div>
+ </div>
+  <div class="row">
+      <div class="col-sm-3">
+           <label>Payment Status</label>
+        <p>{{ d.paymentstatus }} </p>
+      </div>
+      <div class="col-sm-3">
+          <label>Status</label>
+        <p>{{ d.status }}</p>
+      </div>
+  </div>
+
+        <div class="text-center">
+{#            <a  class="btn btn-success"  href="updatestatus?status=dispatched&bookingid={{ d.bookingid }}">Dispatched</a>#}
+            {% if d.status == 'pending' %}
+            <a  class="btn btn-success"  href="acceptbooking?status=accepted&bookingid={{ d.bookingid }}">Accepted</a>
+            <a  class="btn btn-success"  href="rejectbooking?status=rejected&bookingid={{ d.bookingid }}">Rejected</a>
+            {% endif %}
+            <a class="btn btn-success"   href="#mytrackingmodal" data-toggle="modal" onclick="showtrack()" >Update Tracking Status</a>
+        </div>
+
+</div>
+<div class="modal fade" id="mytrackingmodal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="font-family:'Ultra',cursive">ADD REMARKS</h4>
+                <button type="button" class="close" data-dismiss="modal">x</button>
+            </div>
+            <div class="modal-body">
+                <form action="" id="addremarks">
+                    {% csrf_token %}
+                  <div class="form-group">
+                      <label>Booking ID</label>
+                      <input type="text" id="bookingid" readonly data-rule-required="true" name="bookingid" class="form-control" value="{{ d.bookingid }}">
+                  </div>
+                 <div class="form-group">
+                     <label for="remarks">Remarks</label>
+                       <textarea name="remarks" id="remarks" data-rule-required="true" class="form-control"></textarea>
+                 </div>
+
+                <div class="form-group">
+                   <input type="button"  value="Update"  onclick="updatetracking()" class="btn btn-success form-control col-sm-6 offset-sm-3">
+                </div>
+               </form>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+</body>
+</html>

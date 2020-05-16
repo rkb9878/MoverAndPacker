@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <link href="https://fonts.googleapis.com/css?family=Ultra&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static "fontawesome-free-5.11.2-web/css/all.css" %}">
+    <style>
+        .error {
+            color: red;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, .2)), url("{% static "images/x21.jpg" %}") fixed no-repeat center center/cover;
+        }
+
+        h3, label {
+            font-family: 'Ultra', serif;
+            color: lightgreen;
+        }
+
+        {#tr:hover td#}
+        {#{background: #34ce57;}#}
+
+    </style>
+    <script>
+        function confirmdelete(id) {
+            var result = confirm("Are You Sure to Delete the Admin ?");
+            if (result) {
+                window.location.href = 'removeadmin?q=' + id;
+            }
+        }
+
+        function editadmin(id) {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.status == 200 & this.readyState == 4) {
+                    var output = JSON.parse(this.response);
+                    var email = output["email"];
+                    var type = output["type"];
+                    var mobile = output["mobile"];
+                    document.getElementById("email").value = email;
+                    document.getElementById("type").value = type;
+                    document.getElementById("mobile").value = mobile;
+                    $("mymodal").modal('show');
+                }
+            };
+            xmlhttp.open('GET', "/editadmin?q=" + id);
+            xmlhttp.send();
+        }
+
+        function updateadmin() {
+            if ($('#updateadmin').valid()) {
+                var updateadmindata = new FormData();
+                updateadmindata.append('email', document.getElementById("email").value);
+                updateadmindata.append('type', document.getElementById("type").value);
+                updateadmindata.append('mobile', document.getElementById("mobile").value);
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (this.status == 200 & this.readyState == 4) {
+                        var response = this.responseText;
+                        if (response == 'success') {
+                            window.location.href = "viewadmin";
+                        }
+                    }
+                };
+                xmlhttp.open("POST", "updateadmin", true);
+                xmlhttp.send(updateadmindata);
+            }
+        }
+    </script>
+    {% include "navigationadmin.html" %}
+</head>
+
+<body>
+<div class="container">
+    <div style="font-weight: normal">
+        {% include "headerfiles.html" %}
+    </div>
+    <h3 class="text-center " style="margin-top: 50px;color: #005ba4">ADMINS</h3><br>
+    <div class="table-responsive">
+        <table class="table table-dark table-hover text-center">
+            <tr style="color: lightgreen ">
+                <th>EMAIL</th>
+                <th>TYPE</th>
+                <th>MOBILE</th>
+                {% if type != 'subadmin' %}
+                    <th colspan="2" class="text-center">ACTION</th>
+                {% endif %}
+            </tr>
+            {% for p in ar %}
+                <tr>
+                    <td>{{ p.email }}</td>
+                    <td>{{ p.type }}</td>
+                    <td>{{ p.mobile }}</td>
+                    {% if type != "subadmin" %}
+                        <td><a onclick="editadmin('{{ p.email }}')" data-toggle="modal" href="#mymodal"> <i
+                                class="fas fa-edit fa-2x" style="color: lightgreen"></i></a></td>
+                        {#                       <td><a href="editadmin?q={{ p.email }}"><img style="width: 40px;height: 40px" src="{% static "edit.png" %} "></a> </td>#}
+                        <td><a onclick="confirmdelete('{{ p.email }}')"><i class="fas fa-trash fa-2x"
+                                                                           style="color: red"></i></a></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="mymodal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="font-family:'Ultra',cursive">Edit Admin</h4>
+                <button type="button" class="close" data-dismiss="modal">x</button>
+            </div>
+            <div class="modal-body">
+                <form action="" id="updateadmin">
+
+                    <div class="container-fluid">
+                        <div class="form-group">
+                            <label for="email">Enter Email</label>
+                            <input type="email" id="email" name="email" readonly data-rule-required="true"
+                                   class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="type">Select type</label>
+                            <select name="type" id="type" data-rule-required="true" data-msg-required="Select Type"
+                                    class="form-control">
+                                <option value="admin">Admin</option>
+                                <option value="subadmin">Sub admin</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="mobile">Enter Mobile</label>
+                            <input type="text" id="mobile" name="mobile" minlength="10" maxlength="10"
+                                   data-rule-number="true" data-rule-required="true" data-msg-required="Enter Mobile"
+                                   class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type="button" onclick="updateadmin()" class="btn btn-success col-sm-6 offset-sm-3"
+                                   value="Edit">
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

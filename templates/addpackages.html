@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    {% include "headerfiles.html" %}
+        <link href="https://fonts.googleapis.com/css?family=Ultra&display=swap" rel="stylesheet">
+    <style>
+        .error
+        {
+             color: red;
+        }
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, .2)), url("{% static "images/x21.jpg" %}") fixed no-repeat center center/cover;
+        }
+        {#h3,label{#}
+        h3{
+            font-family: 'Ultra', serif; ;
+            color:#005ba4;
+        }
+        #addpackagevalid{
+            background: rgba(255,255,255,0.48);
+            {#margin: 3.3em auto 3.5em;#}
+            padding: 0.5em 1em;"
+        }
+    </style>
+    <script>
+         function selectcity()
+         {
+               var state =  document.getElementById("state").value;
+
+               var xmlhttp;
+               xmlhttp = new XMLHttpRequest();
+               xmlhttp.onreadystatechange = function () {
+               if(this.readyState==4 & this.status==200)
+               {
+                   var listofcities = JSON.parse(this.response);
+                   s="";
+                   s+="<option value=''>Select City</option>";
+                   {#alert(listofcities);#}
+                   for (var i=0; i<listofcities.length;i++)
+                   {
+                        s+="<option>"+listofcities[i]+"</option>";
+                   }
+                    document.getElementById('sourcecity').innerHTML=s;
+               }
+           };
+              xmlhttp.open("GET","showcity?state="+state);
+              xmlhttp.send()
+       }
+       function selectcity1()
+         {
+               var state1 =  document.getElementById("state1").value;
+
+               var xmlhttp;
+               xmlhttp = new XMLHttpRequest();
+               xmlhttp.onreadystatechange = function () {
+               if(this.readyState==4 & this.status==200)
+               {
+                   var listofcities = JSON.parse(this.response);
+                   s="";
+                   s+="<option value=''>Select City</option>";
+                   {#alert(listofcities);#}
+                   for (var i=0; i<listofcities.length;i++)
+                   {
+                        s+="<option>"+listofcities[i]+"</option>";
+                   }
+                    document.getElementById('destinationcity').innerHTML=s;
+               }
+           };
+              xmlhttp.open("GET","showcity?state="+state1);
+              xmlhttp.send()
+       }
+
+         function addpackages()
+           {
+               if($('#addpackagevalid').valid())
+               {
+                   var adminpackagedata = new FormData();
+                   adminpackagedata.append('packagename',document.getElementById("packagename").value);
+                   adminpackagedata.append('description',document.getElementById("description").value);
+                   adminpackagedata.append('state',document.getElementById('state').value);
+                   adminpackagedata.append('sourcecity',document.getElementById('sourcecity').value);
+                   adminpackagedata.append('state1',document.getElementById('state1').value);
+                   adminpackagedata.append('destinationcity',document.getElementById('destinationcity').value);
+                   adminpackagedata.append('price',document.getElementById("price").value);
+
+                   var xmlhttp = new XMLHttpRequest();
+                   xmlhttp.onreadystatechange = function () {
+                       if(this.status == 200 & this.readyState == 4 )
+                       {
+                           var response = this.responseText;
+                           {#alert(response);#}
+                           if(response =="success")
+                           {
+                               window.location.href = "viewpackages";
+                           }
+                           else
+                           {
+                               document.getElementById("msg").innerHTML ="Duplicate Package Name";
+                           }
+                       }
+                   };
+                    xmlhttp.open("POST","addpackages1",true);
+                    xmlhttp.send(adminpackagedata)
+               }
+           }
+    </script>
+</head>
+<body>
+          {% include "navigationadmin.html" %}
+     <div class="container">
+         <div class="row">
+           <div class="col-sm-6 offset-sm-3">
+               <div class="page-header"><h3 class="text-center" style="margin-top: 5px">ADD PACKAGES</h3></div><br>
+         <form action="" method="post" id="addpackagevalid" >
+             {% csrf_token %}
+
+             <div class="form-group">
+                 <label for="packagename">Package Name</label>
+           <input type="text" data-rule-required="true" id="packagename" name="packagename" class="form-control" data-msg-required="Enter Packagename" placeholder="Enter Package Name" >
+         </div>
+
+             <div class="form-group">
+              <label for="description">Description</label>
+             <textarea  data-rule-required="true" id="description" name="description" class="form-control" data-msg-required="Enter Description" placeholder="Enter Package Description"></textarea>
+         </div>
+          <div class="row">
+            <div class="col-sm-6">
+
+              <div class="form-group">
+                  <label for="state">Source State</label>
+               <select id="state" name="state" data-rule-required="true" onchange="selectcity()" class="form-control" data-msg-required="Select Source State" >
+                   <option value="">Select State</option>
+                   {% for state in states %}
+                   <option value="{{ state}}">{{ state }}</option>
+                   {% endfor %}
+               </select>
+         </div>
+            </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+                <label for="sourcecity">Source City</label>
+               <select id="sourcecity" name="sourcecity" data-rule-required="true" class="form-control" data-msg-required="Select Source City" >
+               </select>
+           </div>
+            </div>
+          </div>
+         <div class="row">
+             <div class="col-sm-6">
+                 <div class="form-group">
+                     <label for="state1">Destination State</label>
+                    <select id="state1" name="state1" data-rule-required="true" onchange="selectcity1()" class="form-control" data-msg-required="Select Destination State">
+                      <option value="">Select State</option>
+                      {% for state in states %}
+                       <option value="{{ state}}">{{ state }}</option>
+                       {% endfor %}
+                    </select>
+         </div>
+             </div>
+             <div class="col-sm-6">
+               <div class="form-group">
+                   <label for="destinationcity">Destination City</label>
+               <select id="destinationcity" name="destinationcity" data-rule-required="true" class="form-control" data-msg-required="Select Destination City">
+               </select>
+           </div>
+             </div>
+         </div>
+
+
+         <div class="form-group">
+           <label for="price">Price</label>
+           <input type="text"  data-rule-required="true" data-rule-number="true" id="price" name="price" class="form-control" data-msg-required="Enter Price" placeholder="Enter Price">
+         </div>
+         <div class="form-group">
+            <input type="button" value="Add" onclick="addpackages()" class="btn btn-success form-control col-sm-6 offset-sm-3">
+         </div>
+
+     </form>
+           <h3 id="msg" style="color:orange;"></h3>
+     </div>
+     </div>
+     </div>
+</body>
+</html>

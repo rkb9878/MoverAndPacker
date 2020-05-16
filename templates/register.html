@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+	<title>Packing Kings | Register </title>
+	<!-- Meta tag Keywords -->
+    {% load static %}
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8" />
+	<meta name="keywords" content="Freight Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+	<script>
+		addEventListener("load", function () {
+			setTimeout(hideURLbar, 0);
+		}, false);
+
+		function hideURLbar() {
+			window.scrollTo(0, 1);
+		}
+	</script>
+	<!-- //Meta tag Keywords -->
+
+	<!-- Custom-Files -->
+	<link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
+	<!-- Bootstrap-Core-CSS -->
+	<link rel="stylesheet" href="{% static "css/style.css" %}" type="text/css" media="all" />
+	<!-- Style-CSS -->
+	<link href="{% static "css/font-awesome.min.css" %}" rel="stylesheet">
+	<!-- Font-Awesome-Icons-CSS -->
+	<!-- //Custom-Files -->
+
+	<!-- Web-Fonts -->
+	<link href="//fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+	 rel="stylesheet">
+	<link href="//fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+	<!-- //Web-Fonts -->
+
+
+    {% if request.session.useremail %}
+    {% include 'indexnabaruser.html' %}
+{% elif not request.session.useremail   %}
+    {% include 'indexnavbarpublic.html' %}
+{% endif %}
+	<!-- inner banner -->
+{#	<div class="inner-banner-w3ls d-flex flex-column justify-content-center align-items-center">#}
+{#	</div>#}
+	<!-- //inner banner -->
+	<!-- breadcrumbs -->
+{#	<nav aria-label="breadcrumb">#}
+{#		<ol class="breadcrumb d-flex justify-content-center">#}
+{#			<li class="breadcrumb-item">#}
+{#				<a href="/">Home</a>#}
+{#			</li>#}
+{#			<li class="breadcrumb-item active" aria-current="page">Register</li>#}
+{#		</ol>#}
+{#	</nav>#}
+	<!-- //breadcrumbs -->
+
+	<!-- register  -->
+{#	<div class="modal-body align-w3">#}
+{#		<form action="#" method="post" class="p-sm-3">#}
+{#			<div class="form-group">#}
+{#				<label for="recipient-name" class="col-form-label">Username</label>#}
+{#				<input type="text" class="form-control" placeholder="your name" name="Name" id="recipient-name" required="">#}
+{#			</div>#}
+{#			<div class="form-group">#}
+{#				<label for="recipient-email" class="col-form-label">Email</label>#}
+{#				<input type="email" class="form-control" placeholder="loremipsum@email.com" name="Email" id="recipient-email"#}
+{#				 required="">#}
+{#			</div>#}
+{#			<div class="form-group">#}
+{#				<label for="password1" class="col-form-label">Password</label>#}
+{#				<input type="password" class="form-control" placeholder="******" name="Password" id="password1" required="">#}
+{#			</div>#}
+{#			<div class="form-group">#}
+{#				<label for="password2" class="col-form-label">Confirm Password</label>#}
+{#				<input type="password" class="form-control" placeholder="******" name="Confirm Password" id="password2" required="">#}
+{#			</div>#}
+{#			<div class="sub-w3l">#}
+{#				<div class="sub-w3layouts_hub">#}
+{#					<input type="checkbox" id="brand2" value="">#}
+{#					<label for="brand2" class="mb-3 text-secondary">#}
+{#						<span></span>I Accept to the Terms & Conditions</label>#}
+{#				</div>#}
+{#			</div>#}
+{#			<div class="right-w3l">#}
+{#				<input type="submit" class="form-control bg-theme" value="Register">#}
+{#			</div>#}
+{#		</form>#}
+{#	</div>#}
+	<!-- //register -->
+ {% load static %}
+    {% include "headerfiles.html" %}
+    <style>
+        .error
+        {
+             color: red;
+        }
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, .2)), url("{% static "images/x21.jpg" %}") fixed no-repeat center center/cover;
+        }
+        .inner-banner-w3ls
+         {
+             background: url('{% static 'images/x21.jpg' %}') ;
+             background-repeat: no-repeat;
+             background-size: cover;
+             min-height: 400px;
+
+         }
+    #usermobilevalid ,#divverify{
+            background: rgba(255,255,255,0.18);
+            margin: 3.3em auto 3.5em;
+            padding: 2.5em 1em;"
+        }
+        label
+        {
+            color: darkcyan;
+            font-family: 'Ultra',cursive;
+        }
+    </style>
+    <script>
+
+        function hidediv() {
+            document.getElementById("divverify").style.display = 'none';
+        }
+        function sendotp() {
+            if ($('#usermobilevalid').valid())
+            {
+                var mobile = document.getElementById("mobile").value;
+                var xmlhttp;
+                xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 & this.status == 200) {
+                        var response = this.responseText.trim();
+                        if (response == "success") {
+                            document.getElementById("divverify").style.display = "block";
+                        }
+                    }
+                };
+                xmlhttp.open('GET', '/sendotp?mobile=' + mobile);
+                xmlhttp.send()
+            }
+        }
+        function verifyotp() {
+            if ($('#divverify').valid()) {
+                var otp = document.getElementById("otp").value;
+                var mobile = document.getElementById("mobile").value;
+                var xmlhttp;
+                xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 & this.status == 200) {
+                        var response = this.responseText.trim();
+                        if (response == "success") {
+                            window.location.href = "usersignup1?mobile=" + mobile;
+                        } else {
+                            alert("otp doesn't matches");
+                        }
+                    }
+                };
+                xmlhttp.open('GET', '/verifyotp?otp=' + otp);
+                xmlhttp.send();
+            }
+        }
+    </script>
+</head>
+
+<body onload="hidediv()">
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6 offset-sm-3">
+{#            <center><img src="{% static "images/register.png" %}" ></center>#}
+            <center><h1 style="color: white; background-color: darkcyan ;margin-top: 20px ;width: 50% ;">REGISTER NOW</h1></center>
+            <form id="usermobilevalid">
+                <div class="form-group">
+                <label for="mobile">Enter Mobile</label>
+                <input  type="text" data-rule-required="true" data-rule-number="true" minlength="10" maxlength="10" id="mobile" name="mobile" placeholder="Enter mobile" class="form-control">
+                </div>
+                <div class="form-group text-center">
+                <button type="button" style="background-color: darkcyan;color: white" class="btn" onclick="sendotp()">Send OTP</button>
+                </div>
+            </form>
+
+            <form id="divverify">
+                <div class="form-group">
+                    <label for="otp">Enter OTP</label>
+                    <input type="text" id="otp" name="otp" data-rule-required="true" data-msg-required="Enter OTP" minlength="6" maxlength="6" data-rule-number="true" placeholder="Enter OTP" class="form-control">
+                </div>
+                <div class="form-group text-center">
+                    <button type="button" style="background-color: darkcyan;color: white" class="btn" onclick="verifyotp()">Verify OTP</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+	<!-- footer -->
+	{% include "indexfooter.html" %}
+	<!-- //footer -->
+</body>
+
+</html>

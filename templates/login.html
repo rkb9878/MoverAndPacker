@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <title>Packing Kings | Login </title>
+    <!-- Meta tag Keywords -->
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8"/>
+    <meta name="keywords"
+          content="Freight Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design"/>
+    <script>
+        addEventListener("load", function () {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar()
+        {
+            window.scrollTo(0, 1);
+        }
+    </script>
+    <!-- //Meta tag Keywords -->
+
+    <!-- Custom-Files -->
+    <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
+    <!-- Bootstrap-Core-CSS -->
+    <link rel="stylesheet" href="{% static "css/style.css" %}" type="text/css" media="all"/>
+    <!-- Style-CSS -->
+    <link href="{% static "css/font-awesome.min.css" %}" rel="stylesheet">
+    <!-- Font-Awesome-Icons-CSS -->
+    <!-- //Custom-Files -->
+
+    <!-- Web-Fonts -->
+    <link href="//fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+    <!-- //Web-Fonts -->
+    {% include "headerfiles.html" %}
+    <style>
+         #userloginvalid{
+            background: rgba(255,255,255,0.48);
+            margin: 3.3em auto 3.5em;
+            padding: 2.5em 1em;"
+        }
+        .error {
+            color: red;
+        }
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, .2)), url("{% static "images/x21.jpg" %}") fixed no-repeat center center/cover;
+        }
+
+         .inner-banner-w3ls
+         {
+             background: url('{% static 'images/Insurance-Services.jpg' %}') ;
+             background-repeat: no-repeat;
+             background-size: cover;
+             min-height: 400px;
+
+         }
+        label
+        {
+            font-family: 'Ultra',cursive;
+            color: darkcyan;
+        }
+    </style>
+    <script>
+        function forget() {
+            $("mymodal").modal('show');
+        }
+
+        function userlogin() {
+            if ($('#userloginvalid').valid()) {
+                var userlogindata = new FormData();
+                userlogindata.append('email', document.getElementById("email").value);
+                userlogindata.append('password', document.getElementById("password").value)
+
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 & this.status == 200) {
+                        var response = this.responseText;
+
+                        if (response == "success") {
+                            window.location.href = "/"
+                        } else {
+                            document.getElementById("ans").innerHTML = "Incorrect email and password";
+                        }
+                    }
+                };
+                xmlhttp.open("POST", "userlogin1", true);
+                xmlhttp.send(userlogindata);
+            }
+        }
+
+        function recoverpassword() {
+            if ($('#recover').valid()) {
+                var userforgetdata = new FormData();
+                userforgetdata.append('mobile', document.getElementById("mobile").value);
+
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 & this.status == 200) {
+                        var response = this.responseText;
+
+                        if (response == 'success') {
+                            window.location.href = "login";
+                        } else {
+                            document.getElementById("ans1").innerHTML = "Incorrect Mobile Number";
+                        }
+                    }
+                };
+                xmlhttp.open("POST", "forgetpassword", true);
+                xmlhttp.send(userforgetdata);
+            }
+        }
+    </script>
+
+</head>
+
+<body>
+<!-- header -->
+{% if request.session.useremail %}
+    {% include 'indexnabaruser.html' %}
+{% elif not request.session.useremail   %}
+    {% include 'indexnavbarpublic.html' %}
+{% endif %}
+<!-- //header -->
+<!-- inner banner -->
+{#<div class="inner-banner-w3ls d-flex flex-column justify-content-center align-items-center">#}
+{#</div>#}
+<!-- //inner banner -->
+<!-- breadcrumbs -->
+{#<nav aria-label="breadcrumb">#}
+{#    <ol class="breadcrumb d-flex justify-content-center">#}
+{#        <li class="breadcrumb-item">#}
+{#            <a href="/">Home</a>#}
+{#        </li>#}
+{#        <li class="breadcrumb-item active" aria-current="page">Login</li>#}
+{#    </ol>#}
+{#</nav>#}
+<!-- //breadcrumbs -->
+
+<!-- login  -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 offset-sm-3">
+{#            <div class="page-header">#}
+{#                <h1 class="text-center">USER LOGIN</h1><br>#}
+{#            </div>#}
+            <center> <img style="height:80px; margin-top: 10px" src="{% static "images/login.png" %}" alt=""></center>
+            <form action="" id="userloginvalid">
+
+                <div class="form-group">
+                    <label for="email">Enter Email</label>
+                    <input type="email" data-rule-required="true" data-msg-required="Enter Email" name="email" id="email" placeholder="Enter Email"
+                           class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" data-rule-required="true" name="password" id="password" data-msg-required="Enter Password"
+                           placeholder="Enter Password" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="button" style="background-color: darkcyan;color: white" value="login" onclick="userlogin()" class=" form-control col-sm-6 offset-sm-3 "><br>
+                </div>
+                <center> <a onclick="forget()" style="color: black"  data-toggle="modal" href="#mymodal">Forget Password??</a></center><br>
+                <center><a href="register" style="color: black" >Don't have acccount??Register Now</a></center>
+                <center><h3 id="ans" style="color: orange"></h3></center>
+{#                <h3 style="color: orange">{{ message1 }}</h3>#}
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="mymodal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="">Recover Password</h4>
+                <button type="button" class="close" data-dismiss="modal">x</button>
+            </div>
+            <div class="modal-body">
+                <form action="" id="recover" method="post">
+                    {% csrf_token %}
+                    <div class="container-fluid">
+                        <div class="form-group">
+                            <label for="mobile">Enter Mobile</label>
+                            <input type="text" name="mobile" data-rule-number="true" minlength="10" maxlength="10"
+                                   data-rule-required="true" id="mobile" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type="button" onclick="recoverpassword()" class="btn btn-success" value="Recover">
+
+                        </div>
+                    </div>
+                </form>
+                <h3 id="ans1" style="color: orange"></h3>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- //login -->
+
+<!-- footer -->
+</body>
+
+{% include 'indexfooter.html' %}
+</html>

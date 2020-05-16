@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ {% load static %}
+        <link href="https://fonts.googleapis.com/css?family=Ultra&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static "fontawesome-free-5.11.2-web/css/all.css" %}">
+    <style>
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, .2)), url("{% static "images/x21.jpg" %}") fixed no-repeat center center/cover;
+        }
+        h3,label{
+            {#font-family: 'Ultra', serif;#}
+            color: #005ba4;
+        }
+       {# tr:hover td#}
+       {#{background: #34ce57;}#}
+    </style>
+    <script>
+        function confirmdelete(id) {
+            var result = confirm("Are You Sure to Delete the Service Station ?");
+            if(result)
+            {
+                window.location.href = 'deleteservicingstations?q='+id;
+            }
+        }
+        function editservicestations(id) {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if(this.status == 200 & this.readyState==4)
+                {
+                    var output = JSON.parse(this.response);
+                    var servicecityname = output["servicecityname"];
+                    var description= output["description"];
+                    var state = output["state"];
+                    document.getElementById("servicecityname").value = servicecityname;
+                    document.getElementById("description").value = description;
+                    document.getElementById("state").value = state;
+                    $("mymodal").modal('show');
+                }
+            };
+            xmlhttp.open('GET',"/editservicestations?q="+id);
+            xmlhttp.send();
+        }
+        function updateservicestations() {
+            if($('#updateservicestations').valid())
+            {
+                var updateservicestationdata = new FormData();
+                updateservicestationdata.append('servicecityname',document.getElementById("servicecityname").value);
+                updateservicestationdata.append('description',document.getElementById("description").value);
+                updateservicestationdata.append('state',document.getElementById("state").value);
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function ()
+                {
+                    if(this.status==200 & this.readyState==4)
+                    {
+                        var response = this.responseText;
+                        if(response=='success')
+                        {
+                            window.location.href="viewservicingstations";
+                        }
+                    }
+                };
+                xmlhttp.open("POST","updateservicestations",true);
+                xmlhttp.send(updateservicestationdata);
+            }
+
+        }
+
+        function selectstate() {
+            var state = document.getElementById("choosestate").value;
+
+            var xmlhttp;
+            xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 & this.status == 200) {
+                    var output = JSON.parse(this.response);
+                    s = "";
+                    {#alert(output);#}
+                    for (var i = 0; i < output.length; i++) {
+                        s+="<tr>";
+                        s += "<td>" + output[i].servicecityname + "</td>";
+                        s += "<td>" + output[i].description + "</td>";
+                        s += "<td>" + output[i].state + "</td>";
+                        s+="<td><a onclick=\"editservicestations('"+output[i].servicecityname+"')\" data-toggle=\"modal\" href=\"#mymodal\" > <i class=\"fas fa-edit fa-2x\" style=\"color: lightgreen\"></i></a></td>\n" +
+                            "                <td><a  onclick=\"confirmdelete('"+output[i].servicecityname+"')\"><i class=\"fas fa-trash fa-2x\" style=\"color: red\"></i></a></td>";
+                        s+="</tr>";
+
+                    }
+                    document.getElementById('tablebody').innerHTML = s;
+                }
+            };
+            xmlhttp.open("GET", "choosestate?state=" + state);
+            xmlhttp.send();
+
+        }
+    </script>
+</head>
+<body>
+   {% include "navigationadmin.html" %}
+  {% include "headerfiles.html" %}
+   <div class="container">
+   <h3 class="text-center" style="margin-top: 50px;">SERVICE STATIONS</h3>
+    <div class="form-group col-sm-6 offset-sm-3">
+                            <h5>Choose State</h5>
+                            <select class="form-control" name="choosestate" id="choosestate" required
+                                    data-msg-required="Choose State" onchange="selectstate()">
+                                <option value="">Select State</option>
+                                <option>Punjab</option>
+                                <option>Delhi</option>
+                                <option>Haryana</option>
+                                <option>Uttar Pradesh</option>
+                                <option>Jammu and Kashmir</option>
+                                <option>Maharashtra</option>
+                                <option>Madhya Pradesh</option>
+                                <option>Karnataka</option>
+                                <option>Kerala</option>
+                                <option>Tamil Nadu</option>
+                                <option>West Bengal</option>
+                                <option>Andhra Pradesh</option>
+                                <option>Rajasthan</option>
+                                <option>Gujarat</option>
+                                <option>Assam</option>
+                                <option>Uttarakhand</option>
+                            </select>
+                        </div><br>
+   <div class="table-responsive">
+       <table class="table table-dark table-hover text-center" >
+       <thead style="color: lightgreen" >
+           <th>SERVICE CITY NAME</th>
+           <th>DESCRIPTION</th>
+           <th>STATE</th>
+            <th colspan="2" class="text-center">ACTION</th>
+       </thead>
+       <tbody id="tablebody">
+           {% for row in ar %}
+               <tr>
+               <td>{{ row.servicecityname }}</td>
+               <td>{{ row.description }}</td>
+               <td>{{ row.state}}</td>
+                <td><a onclick="editservicestations('{{ row.servicecityname }}')" data-toggle="modal" href="#mymodal" > <i class="fas fa-edit fa-2x" style="color: lightgreen"></i></a></td>
+                <td><a  onclick="confirmdelete('{{ row.servicecityname }}')"><i class="fas fa-trash fa-2x" style="color: red"></i></a></td>
+               </tr>
+           {% endfor %}
+
+   </tbody>
+       </table>
+   </div>
+   </div>
+<div class="modal fade" id="mymodal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="font-family:'Ultra',cursive">Edit Service Station</h4>
+                <button type="button" class="close" data-dismiss="modal">x</button>
+            </div>
+            <div class="modal-body">
+                <form action="" id="updateservicestations">
+                    {% csrf_token %}
+                  <div class="form-group">
+                      <label for="servicecityname">Service City Name</label>
+                      <input type="text" id="servicecityname" readonly data-rule-required="true" name="servicecityname" class="form-control">
+                  </div>
+                 <div class="form-group">
+                     <label for="description">Description</label>
+                       <textarea name="description" id="description" data-rule-required="true" data-msg-required="Enter Description" class="form-control"></textarea>
+                 </div>
+                <div class="form-group">
+                    <label for="state">State</label>
+                      <input type="text" id="state" data-rule-required="true"  readonly  name="state" class="form-control" >
+                </div>
+                <div class="form-group">
+                   <input type="button"  value="Edit"  onclick="updateservicestations()" class="btn btn-success form-control col-sm-6 offset-sm-3">
+                </div>
+               </form>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+</body>
+</html>

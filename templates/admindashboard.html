@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+    <style>
+    body {
+            background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, .1)), url("{% static "images/x21.jpg" %}") fixed no-repeat center center/cover;
+    }
+        label{
+            font-family: 'Ultra', serif;
+            color: lightgreen;
+        }
+    </style>
+  {% comment %} <style>
+        .error {
+            color: red;
+        }
+    </style>
+    <script>
+        function changepasswordshow() {
+            $("changepass").modal('show');
+        }
+
+        function adminchangepassword() {
+            if ($('#form').valid()) {
+                var changepassworddata = new FormData();
+                changepassworddata.append('oldpassword', document.getElementById("oldpassword").value);
+                changepassworddata.append('newpassword', document.getElementById("newpassword").value);
+                changepassworddata.append('confirmpassword', document.getElementById("confirmpassword").value);
+
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 & this.status == 200) {
+                        var response = this.responseText;
+
+                        if (response == "success") {
+                            window.location.href = "adminlogin";
+                        } else if (response == "failed due to wrong old password")
+                        {
+                            document.getElementById("ans").innerHTML = "Old Password Incorrect !!";
+                        }
+                        else {
+                            window.location.href ="adminlogin";
+                        }
+                    }
+                };
+                xmlhttp.open("POST", "adminchangepassword", true);
+                xmlhttp.send(changepassworddata);
+            }
+        }
+    </script>{% endcomment %}
+</head>
+<body>
+{% include "headerfiles.html" %}
+{% include "navigationadmin.html" %}
+<div class="container">
+<h1>WELCOME {{ request.session.adminemail }}</h1>
+{#<a onclick="changepasswordshow('{{ request.session.adminemail }}')" data-toggle="modal" href="#changepass">Change#}
+{#        Password</a>#}
+</div>
+{#<div class="modal fade" id="changepass" role="dialog">#}
+{#    <div class="modal-dialog">#}
+{#        <div class="modal-content">#}
+{#            <div class="modal-header">#}
+{#                <h4 class="modal-title" style="">Change Password</h4>#}
+{#                <button type="button" class="close" data-dismiss="modal">x</button>#}
+{#            </div>#}
+{#            <div class="modal-body">#}
+{#                <form action="" id="form">#}
+{#                    {% csrf_token %}#}
+{#                    <div class="form-group">#}
+{#                        Enter Old Password#}
+{#                        <input type="password" data-rule-required="true" name="oldpassword" id="oldpassword"#}
+{#                               class="form-control">#}
+{#                    </div>#}
+{#                    <div class="form-group">#}
+{#                        Enter New Password#}
+{#                        <input type="password" data-rule-required="true" name="newpassword" id="newpassword"#}
+{#                               class="form-control">#}
+{#                    </div>#}
+{#                    <div class="form-group">#}
+{#                        Enter Confirm Password#}
+{#                        <input type="password" data-rule-required="true" id="confirmpassword" name="confirmpassword"#}
+{#                               data-rule-equalto="#newpassword" class="form-control">#}
+{#                    </div>#}
+{#                    <div class="form-group">#}
+{#                        <input type="button" onclick="adminchangepassword()" value="change"#}
+{#                               class="btn btn-success form-control">#}
+{#                    </div>#}
+{##}
+{#                </form>#}
+{#                <h1 id="ans" style="color: orange"></h1>#}
+{#            </div>#}
+{##}
+{##}
+{#            <div class="modal-footer">#}
+{#                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+</body>
+</html>

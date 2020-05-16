@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    {% include "headerfiles.html" %}
+    <link href="https://fonts.googleapis.com/css?family=Ultra&display=swap" rel="stylesheet">
+	<!--fonts-->
+         <script>
+           {#$(document).ready(function () {#}
+           {#    $("#addnews").validate();#}
+
+             function addnews()
+           {
+               if($('#addnews').valid())
+               {
+                   var addnewsdata = new FormData();
+                   addnewsdata.append('title',document.getElementById("title").value);
+                   addnewsdata.append('description',document.getElementById("description").value);
+
+                   var xmlhttp = new XMLHttpRequest();
+                   xmlhttp.onreadystatechange = function () {
+                       if(this.status == 200 & this.readyState == 4 )
+                       {
+                           var response = this.responseText;
+                           if(response =="success")
+                           {
+                               window.location.href = "viewnews";
+                           }
+                           else
+                           {
+                               document.getElementById("ans").innerText ="News Already added";
+                           }
+                       }
+                   };
+                    xmlhttp.open("POST","addnews1",true);
+                    xmlhttp.send(addnewsdata)
+               }
+           }
+    </script>
+    <style>
+
+        .error
+        {
+             color: red;
+        }
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, .3)), url("{% static "images/x21.jpg" %}") fixed no-repeat center center/cover;
+        }
+        {#h3,label{#}
+        h3{
+            font-family: 'Ultra', serif; ;
+            color: #005ba4;
+        }
+       #addnews {
+           background: rgba(255, 255, 255, 0.38);
+           margin: 3.3em auto 3.5em;
+           padding: 2.5em 1em;
+       }
+    </style>
+</head>
+<body>
+    {% include "navigationadmin.html" %}
+      <div class="container">
+          <div class="row">
+           <div class="col-sm-6 offset-sm-3">
+               <div class="page-header"><h3 style="margin-top: 50px" class="text-center">ADD NEWS</h3></div>
+
+          <form action="" method="post" id="addnews" >
+              {% csrf_token %}
+          <div class="form-group">
+              <label for="title">Title</label>
+          <input type="text" data-rule-required="true" id="title" name="title" class="form-control" data-msg-required="Enter News Title" placeholder="Enter News Title" >
+          </div><br>
+          <div class="form-group">
+              <label for="description">Description</label>
+              <textarea name="description" data-rule-required="true" id="description" class="form-control" data-msg-required="Enter News Description" placeholder="Enter News Description"></textarea>
+          </div><br>
+          <div class="form-group">
+          <input type="button" value="ADD" onclick="addnews()" class="btn btn-success col-sm-6 offset-sm-3">
+          </div>
+              <h3 id="ans" style="color: orange"></h3>
+         </form>
+           </div>
+      </div>
+          </div>
+
+</body>
+</html>

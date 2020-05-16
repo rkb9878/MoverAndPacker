@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Material Icons';
+            font-style: normal;
+            font-weight: 400;
+            src: local('Material Icons'), local('MaterialIcons-Regular'), url(https://fonts.gstatic.com/s/materialicons/v7/2fcrYFNaTjcS6g4U3t-Y5UEw0lE80llgEseQY3FEmqw.woff2) format('woff2'), url(https://fonts.gstatic.com/s/materialicons/v7/2fcrYFNaTjcS6g4U3t-Y5RV6cRhDpPC5P4GCEJpqGoc.woff) format('woff');
+        }
+        .material-icons {
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            word-wrap: normal;
+            -moz-font-feature-settings: 'liga';
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        i {
+            cursor: pointer;
+        }
+
+        .rating i {
+            font-size: 3em;
+        }
+    </style>
+</head>
+<body>
+<div class="container col-sm-8 offset-sm-2">
+    <div class="text-center">
+        <h1>Reviews</h1>
+    </div>
+    <br>
+    {% csrf_token %}
+    <form id="review" action="addreviews" method="post" enctype="multipart/form-data">
+        <table class="table">
+            <tr>
+                <td> Booking ID</td>
+                <td>{{ bookingid }}</td>
+            </tr>
+            <tr>
+                <td>Booker Name</td>
+                <td>{{ bookername }}</td>
+            </tr>
+            <tr>
+                <td>Source City</td>
+                <td>{{ sourcecity }}</td>
+            </tr>
+            <tr>
+                <td>Destination City</td>
+                <td>{{ destinationcity }}</td>
+            </tr>
+        </table>
+        <br>
+        <h2>Please Rate Service</h2>
+        <div class="rating text-warning"></div>
+        <br>
+        <h2>Write Review</h2><br>
+        <textarea class="form-control" id="review" name="review" required></textarea><br>
+        <h2>Publish Photo</h2>
+        <input type="file" id="photo" name="photo" class="form-control" placeholder="File" data-rule-required="true"><br>
+        <input type="hidden" id="bookingid" name="bookingid" value="{{ bookingid }}">
+        <input type="hidden" id="bookername" name="bookername" value="{{ bookername }}">
+        <input type="hidden" id="sourcecity" name="sourcecity" value="{{ sourcecity }}">
+        <input type="hidden" id="destinationcity" name="destinationcity" value="{{ destinationcity }}">
+        <div class="text-center mt-1">
+            <input type="submit" class="btn btn-warning" value="submit">
+        </div>
+    </form>
+</div>
+
+<script src="{% static 'js/jquery-3.4.1.js' %}"></script>
+<script src="{% static 'js/jquery.star.rating.js' %}"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.rating').addRating();
+    })
+</script>
+
+</body>
+</html>

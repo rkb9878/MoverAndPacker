@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        label
+        {
+            color:#ff3c41;
+        }
+        label,h3
+        {
+            {#font-family: 'Ultra',cursive;#}
+            font-family: 'Times New Roman',Arial;
+        }
+    </style>
+   {% load static %}
+{#    {% include "headerfiles.html" %}#}
+    <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
+    <!-- Bootstrap-Core-CSS -->
+    <link rel="stylesheet" href="{% static "css/style.css" %}" type="text/css" media="all"/>
+    <!-- Style-CSS -->
+    <link href="{% static "css/font-awesome.min.css" %}" rel="stylesheet">
+    <!-- Font-Awesome-Icons-CSS -->
+    <!-- //Custom-Files -->
+
+    <!-- Web-Fonts -->
+    <link href="//fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+    <!-- //Web-Fonts -->
+<script>
+    function gettracking() {
+                var trackingdata = new FormData();
+                trackingdata.append('bookingid',document.getElementById("bookingid").value);
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function ()
+                {
+                    if(this.status==200 & this.readyState==4)
+                    {
+                        var response = JSON.parse(this.response);
+                        var remarks = response['remarks']    ;
+                        var dateofupdate = response['dateofupdate'];
+                            document.getElementById("message").innerHTML = remarks+"<br>"+"Dated:"+dateofupdate;
+
+                    }
+                };
+                xmlhttp.open("POST","trackbooking",true);
+                xmlhttp.send(trackingdata);
+
+
+        }
+</script>
+</head>
+<body>
+   {% include "indexnabaruser.html" %}
+   <center><h3 style="margin-top: 25px; width:40%;color: white;background-color: darkcyan">BOOKING DETAILS</h3></center><br>
+   <div class="col-sm-10 offset-sm-1">
+   {% if d == "You have no pending Bookings Yet" %}
+      <h1>You have no pending Bookings yet !!</h1>
+   {% elif d == 'You have no success Bookings Yet' %}
+       <h1>You have no successful Bookings yet !!!</h1>
+   {% else %}
+{#       {{ d }}#}
+       {% for row in  d  %}
+
+           <div class="row">
+               <div class="col-sm-3">
+                   <label>Pickup State</label>
+                   <p>{{ row.pickupstate }} </p>
+               </div>
+               <div class="col-sm-3">
+                   <label>Pickup City</label>
+                   <p>{{ row.pickupcity }}</p>
+               </div>
+               <div class="col-sm-3">
+                   <label>Pickup Address</label>
+                   <p>{{ row.pickupaddress }} </p>
+               </div>
+               <div class="col-sm-3">
+                   <label>Booking Date</label>
+                   <p>{{ row.dateofbooking }} </p>
+               </div>
+           </div>
+           <div class="row">
+               <div class="col-sm-3">
+                   <label>Dropping State</label>
+                   <p>{{ row.droppingstate }} </p>
+               </div>
+               <div class="col-sm-3">
+                   <label>Dropping City</label>
+                   <p>{{ row.droppingcity }} </p>
+               </div>
+               <div class="col-sm-3">
+                   <label>Dropping Address</label>
+                   <p>{{ row.droppingaddress }} </p>
+               </div>
+               <div class="col-sm-3">
+                   <label>Package Name</label>
+                   <p>{{ row.packagename }} </p>
+               </div>
+           </div>
+           <div class="row">
+               <div class="col-sm-3">
+                   <label>Date of Pickup</label>
+                   <p>{{ row.dateofpickup }} </p>
+               </div>
+               <div class="col-sm-3">
+                   <label>Date of Dropping</label>
+                   <p>{{ row.dateofdropping }} </p>
+               </div>
+               <div class="col-sm-3">
+                   <label>Payment Mode</label>
+                   <p>{{ row.paymentmode }} </p>
+               </div>
+               <div class="col-sm-3">
+                   <label>Amount Paid</label>
+                   <p>{{ row.amountpaid }} </p>
+               </div>
+           </div>
+           <div class="row">
+               <div class="col-sm-3">
+                   <label>Payment Status</label>
+                   <p>{{ row.paymentstatus }} </p>
+               </div>
+               <div class="col-sm-3">
+                   <label> Status</label>
+                   <p>{{ row.status }} </p>
+               </div>
+            <div class="col-sm-3">
+                <label>Booking ID</label>
+                <p>{{ row.bookingid }}</p>
+            </div>
+           </div>
+           {% if row.paymentstatus == 'pending' %}
+           <div class="text-center"><a class="btn"  style="background-color: #fc636b;color: white" onclick="gettracking()">TRACK NOW</a>
+           <br><br>
+           <h4 id="message"></h4>
+           </div>
+           {% endif %}
+           <input type="hidden" id="bookingid" value="{{ row.bookingid }}">
+           <h3>--------------------------------------------------------------------------------------</h3>
+       {% endfor %}
+   {% endif %}
+   </div>
+</body>
+</html>

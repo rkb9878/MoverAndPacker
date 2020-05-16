@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <script src="{% static "js/jquery-3.4.1.js" %}"></script>
+    <script src="{% static "js/popper.js" %}"></script>
+    <script src="{% static "dist/jquery.validate.js" %}"></script>
+     <link href="https://fonts.googleapis.com/css?family=Ultra&display=swap" rel="stylesheet">
+     <script type="application/x-javascript">
+		addEventListener("load", function () {
+			setTimeout(hideURLbar, 0);
+		}, false);
+
+		function hideURLbar() {
+			window.scrollTo(0, 1);
+		}
+	</script>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<!-- Custom Theme files -->
+	<link href="{% static "admincss/css/font-awesome.css" %}" rel="stylesheet">
+	<link href="{% static "admincss/css/style.css" %}" rel='stylesheet' type='text/css' />
+	<!--fonts-->
+	<link href="//fonts.googleapis.com/css?family=Josefin+Sans:100,100i,300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
+	<link href="//fonts.googleapis.com/css?family=PT+Sans:400,400i,700,700i" rel="stylesheet">
+	<!--//fonts-->
+    <style>
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, .1)), url("{% static "images/x21.jpg" %}") fixed no-repeat center center/cover;
+        }
+        .error{
+             color: red;
+        }
+
+    </style>
+    <script>
+           function insertadmin()
+           {
+               if($('#addadmin').valid())
+               {
+                   var adminsignupdata = new FormData();
+                   adminsignupdata.append('email',document.getElementById("email").value);
+                   adminsignupdata.append('password',document.getElementById("password").value);
+                   adminsignupdata.append('type',document.getElementById("type").value);
+                   adminsignupdata.append('mobile',document.getElementById("mobile").value);
+
+                   var xmlhttp = new XMLHttpRequest();
+                   xmlhttp.onreadystatechange = function () {
+                       if(this.status == 200 & this.readyState == 4 )
+                       {
+                           var response = this.responseText;
+                           if(response =="success")
+                           {
+                               window.location.href = "adminlogin";
+                           }
+                           else
+                           {
+                               document.getElementById("ans").innerText ="Admin Already Added";
+                           }
+                       }
+                   };
+                    xmlhttp.open("POST","addadmin1",true);
+                    xmlhttp.send(adminsignupdata)
+               }
+           }
+    </script>
+</head>
+
+<body>
+<div class="login-section-agileits">
+		<h3 class="form-head" style="font-family: 'Ultra',cursive">Add New Admin </h3>
+   <form action="" method="post" id="addadmin">
+       {% csrf_token %}
+               <div class="w3ls-icon">
+				<span class="fa fa-envelope" aria-hidden="true"></span>
+                <input type="email" data-rule-required="true" data-msg-required="Enter Email" id="email" name="email" class="form-control" placeholder="Email" >
+			</div>
+			<div class="w3ls-icon">
+				<span class="fa fa-lock" aria-hidden="true"></span>
+                <input type="password" data-rule-required="true" data-msg-required="Enter Password" id="password" name="password" class="form-control" placeholder="Password">
+			</div>
+            <div class="w3ls-icon">
+				<span class="fa fa-mobile-phone" aria-hidden="true"></span>
+                  <input type="text"  data-rule-number="true" maxlength="10" minlength="10" data-rule-required="true" data-msg-required="Enter Mobile" id="mobile" name="mobile" class="form-control lock" placeholder="Enter Mobile">
+			</div>
+			<div class="w3ls-icon">
+                <select name="type" data-rule-required="true" id="type" class="form-control" data-msg-required="Select Type" style="width: 90%" >
+                      <option value="">Select Type</option>
+                      <option value="admin">Admin</option>
+                      <option value="subadmin">Sub admin</option>
+                </select>
+			</div>
+        <input type="button" onclick="insertadmin()" value="add" ><br><br>
+        <h3 id="ans" style="color: darkred"></h3>
+</form>
+    <a href="adminlogin" class="text-center" style="color: black">Already have Account?Login!!</a>
+	</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{#<body>#}
+{# <div class="container">#}
+{#       <div class="row">#}
+{#           <div class="col-sm-6 offset-sm-3">#}
+{#               <div class="jumbotron"><h1 class="text-center">Admin Signup</h1></div>#}
+{#          <form action="" method="post" id="addadmin">#}
+{#              {% csrf_token %}#}
+{##}
+{#              <div class="form-group">#}
+{#                  Enter Email#}
+{#                 <input type="email" data-rule-required="true" id="email" name="email" class="form-control" >#}
+{#              </div>#}
+{#              <div class="form-group">#}
+{#                  Enter Password#}
+{#                  <input type="password" data-rule-required="true" id="password" name="password" class="form-control" >#}
+{#              </div>#}
+{#              <div class="form-group">#}
+{#                  Enter Type#}
+{#                  <select name="type" data-rule-required="true" id="type" class="form-control ">#}
+{#                      <option value="">Select Type</option>#}
+{#                      <option value="admin">admin</option>#}
+{#                      <option value="subadmin">sub admin</option>#}
+{#                  </select>#}
+{#              </div>#}
+{#              <div class="form-group">#}
+{#                  Enter Mobile#}
+{#                  <input type="text"  data-rule-number="true" maxlength="10" minlength="10" data-rule-required="true" id="mobile" name="mobile" class="form-control">#}
+{#              </div>#}
+{#              <div class="form-group">#}
+{#                  <input type="button" onclick="insertadmin()" value="add" class="btn btn-success form-control">#}
+{#              </div>#}
+{#              <h3 id="ans" style="color: orange"></h3>#}
+{##}
+{#          </form>#}
+{#      </div>#}
+{#      </div>#}
+{#      </div>#}
+{#</body>#}
+{#</html>#}
